@@ -49,7 +49,7 @@ boot/head.o: boot/head.s FORCE
 	@make head.o -C boot/
 
 kernel.sym: boot/head.o init/main.o \
-		$(ARCHIVES) $(DRIVERS) $(MATH) $(LIBS)
+	$(ARCHIVES) $(DRIVERS) $(MATH) $(LIBS)
 	@$(LD) $(LDFLAGS) boot/head.o init/main.o \
 	$(ARCHIVES) \
 	$(DRIVERS) \
@@ -103,8 +103,6 @@ dep:
 # Test on emulators with different prebuilt rootfs
 include Makefile.emulators
 
-# Tags for source code reading
-include Makefile.tags
 
 # For Call graph generation
 include Makefile.callgraph
@@ -134,12 +132,8 @@ help:
 	@echo "     make debug-fd -- debug the kernel with fs in floppy"
 	@echo "     make debug-hd -- debug the kernel with fs in hard disk"
 	@echo ""
-	@echo "     make switch -- switch the emulator: qemu and bochs"
-	@echo ""
 	@echo "     :: Read ::"
 	@echo ""
-	@echo "     make cscope -- genereate the cscope index databases"
-	@echo "     make tags -- generate the tag file"
 	@echo "     make cg -- generate callgraph of the default main entry"
 	@echo "     make cg f=func d=dir|file b=browser -- generate callgraph of func in file/directory"
 	@echo ""

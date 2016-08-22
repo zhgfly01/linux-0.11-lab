@@ -11,7 +11,7 @@ flp:
 ramfs:
 	@make ramfs -C rootfs
 
-# VM (Qemu/Bochs) Setting for different rootfs
+# VM (Qemu) Setting for different rootfs
 
 ROOT_RAM = 0000
 ROOT_FDB = 021d
@@ -28,46 +28,12 @@ QEMU_CMD_HDA = $(QEMU_CMD) -hda rootfs/$(HDA_IMG)
 nullstring :=
 QEMU_DBG = $(nullstring) -s -S #-nographic #-serial '/dev/ttyS0'"
 
-BOCHS_CFG = tools/bochs/bochsrc/
-BOCHS_CMD = $(BOCHS) -f $(BOCHS_CFG)/bochsrc-fda.bxrc
-BOCHS_CMD_FDB = $(BOCHS) -f $(BOCHS_CFG)/bochsrc-fdb.bxrc
-BOCHS_CMD_HDA = $(BOCHS) -f $(BOCHS_CFG)/bochsrc-hd.bxrc
-BOCHS_DBG = .dbg
 
-VM = $(shell cat $(VM_CFG) 2>/dev/null)
-
-ifeq ($(VM), bochs)
-        NEW_VM=qemu
-else
-        NEW_VM=bochs
-endif
-
-switch:
-	@echo "Switch to use emulator: $(NEW_VM)"
-	@echo $(NEW_VM) > $(VM_CFG)
-
-VM=$(shell cat $(VM_CFG) 2>/dev/null)
-
-ifeq ($(VM), bochs)
-        VM_CMD = $(BOCHS_CMD)
-        VM_CMD_FDB = $(BOCHS_CMD_FDB)
-        VM_CMD_HDA = $(BOCHS_CMD_HDA)
-        VM_DBG = $(BOCHS_DBG)
-else
-        VM_CMD = $(QEMU_CMD)
-        VM_CMD_FDB = $(QEMU_CMD_FDB)
-        VM_CMD_HDA = $(QEMU_CMD_HDA)
-        VM_DBG = $(QEMU_DBG)
-endif
 
 # Allow to use curses based console via ssh
 VM_DISPLAY =
 ifeq ($(G),0)
-ifeq ($(VM), bochs)
-	VM_DISPLAY = .term
-else
 	VM_DISPLAY = $(nullstring) -curses
-endif
 endif
 
 # Running on emulators with differrent rootfs
@@ -78,26 +44,32 @@ ramdisk-boot:
 
 start: ramdisk-boot Image
 	$(SETROOTDEV_CMD_RAM)
-	$(VM_CMD)$(VM_DISPLAY)
+	$(QEMU_CMD)$(VM_DISPLAY)
 
 start-fd: Image flp
 	$(SETROOTDEV_CMD_FDB)
-	$(VM_CMD_FDB)$(VM_DISPLAY)
+	$(QEMU_CMD_FDB)$(VM_DISPLAY)
 
 start-hd: Image hda
 	$(SETROOTDEV_CMD_HDA)
-	$(VM_CMD_HDA)$(VM_DISPLAY)
+	$(QEMU_CMD_HDA)$(VM_DISPLAY)
 
 # Debugging the above targets
 
 debug: ramdisk-boot Image
 	$(SETROOTDEV_CMD_RAM)
-	$(VM_CMD)$(VM_DBG)$(VM_DISPLAY)
+	$(QEMU_CMD)$(QEMU_DBG)$(VM_DISPLAY) &
+	sleep 2
+	gnome-terminal -e "ddd -x tools/gdbinit"
 
 debug-fd: Image flp
 	$(SETROOTDEV_CMD_FDB)
-	$(VM_CMD_FDB)$(VM_DBG)$(VM_DISPLAY)
+	$(QEMU_CMD_FDB)$(QEMU_DBG)$(VM_DISPLAY) &
+	sleep 2
+	gnome-terminal -e "ddd -x tools/gdbinit"
 
 debug-hd: Image hda
 	$(SETROOTDEV_CMD_HDA)
-	$(VM_CMD_HDA)$(VM_DBG)$(VM_DISPLAY)
+	$(QEMU_CMD_HDA)$(QEMU_DBG)$(VM_DISPLAY) &
+	sleep 2
+	gnome-terminal -e "ddd -x tools/gdbinit"
