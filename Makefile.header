@@ -1,9 +1,6 @@
 # Qemu
 QEMU = qemu-system-i386
 
-# Tool for Image building
-BUILD = tools/build.sh
-
 # Tool for specify root device
 SETROOTDEV = tools/setrootdev.sh
 

@@ -37,7 +37,12 @@ Image: boot/bootsect boot/setup kernel.sym ramfs FORCE
 	@cp -f images/kernel.sym images/kernel.tmp
 	@$(STRIP) images/kernel.tmp
 	@$(OBJCOPY) -O binary -R .note -R .comment images/kernel.tmp images/kernel
-	$(BUILD) boot/bootsect boot/setup images/kernel images/Image
+	
+	dd if=boot/bootsect bs=512 count=1 of=images/Image #2>&1 >/dev/null
+	dd if=boot/setup seek=1 bs=512 count=4 of=images/Image #2>&1 >/dev/null
+	dd if=images/kernel seek=5 bs=512 of=images/Image #2>&1 >/dev/null
+
+	#$(BUILD) boot/bootsect boot/setup images/kernel images/Image
 	@rm images/kernel.tmp
 	@rm -f images/kernel
 	@sync
