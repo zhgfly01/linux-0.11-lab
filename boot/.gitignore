@@ -1,3 +1,4 @@
 bootsect
 setup
 *.sym
+*.dis

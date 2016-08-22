@@ -38,6 +38,9 @@ Image: boot/bootsect boot/setup kernel.sym ramfs FORCE
 	@$(STRIP) images/kernel.tmp
 	@$(OBJCOPY) -O binary -R .note -R .comment images/kernel.tmp images/kernel
 	
+	objdump -d boot/setup.sym > boot/setup.dis
+	objdump -d boot/bootsect.sym > boot/bootsect.dis
+
 	dd if=boot/bootsect bs=512 count=1 of=images/Image #2>&1 >/dev/null
 	dd if=boot/setup seek=1 bs=512 count=4 of=images/Image #2>&1 >/dev/null
 	dd if=images/kernel seek=5 bs=512 of=images/Image #2>&1 >/dev/null
@@ -97,9 +100,6 @@ clean:
 	@make clean -C callgraph
 	@for i in init mm fs kernel lib boot; do make clean -C $$i; done
 
-distclean: clean
-	@rm -f tag* cscope* linux-0.11.*
-
 dep:
 	@sed '/\#\#\# Dependencies/q' < Makefile > tmp_make
 	@cp tmp_make Makefile
@@ -121,7 +121,6 @@ help:
 	@echo ""
 	@echo "     make --generate a kernel floppy Image with a fs on hda1"
 	@echo "     make clean -- clean the object files"
-	@echo "     make distclean -- only keep the source code files"
 	@echo ""
 	@echo "     :: Test ::"
 	@echo ""
