@@ -1,7 +1,16 @@
-file images/kernel.sym
+
 target remote :1234
-b main
-c
+
+file boot/bootsect.sym
+b _start
+
+#file boot/setup.sym
+#b _start
+
+#file images/kernel.sym
+#b main
+
+si
 
 
 
