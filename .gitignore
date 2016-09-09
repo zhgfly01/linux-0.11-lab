@@ -8,4 +8,6 @@ Thumbs.db
 tags
 cscope.*
 bochsout.txt
+*.orig
+*.rej
 /si

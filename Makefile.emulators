@@ -60,16 +60,16 @@ debug: ramdisk-boot Image
 	$(SETROOTDEV_CMD_RAM)
 	$(QEMU_CMD)$(QEMU_DBG)$(VM_DISPLAY) &
 	sleep 2
-	gnome-terminal -e "ddd -x tools/gdbinit"
+	xfce4-terminal -e "ddd -x tools/gdbinit"
 
 debug-fd: Image flp
 	$(SETROOTDEV_CMD_FDB)
 	$(QEMU_CMD_FDB)$(QEMU_DBG)$(VM_DISPLAY) &
 	sleep 2
-	gnome-terminal -e "ddd -x tools/gdbinit"
+	xfce4-terminal -e "ddd -x tools/gdbinit"
 
 debug-hd: Image hda
 	$(SETROOTDEV_CMD_HDA)
 	$(QEMU_CMD_HDA)$(QEMU_DBG)$(VM_DISPLAY) &
 	sleep 2
-	gnome-terminal -e "ddd -x tools/gdbinit"
+	xfce4-terminal -e "ddd -x tools/gdbinit"

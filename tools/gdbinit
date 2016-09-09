@@ -1,21 +1,21 @@
 target remote :1234
 
-set architecture i8086
-file boot/bootsect.sym
-b *0x7c00
-b *0x901d
-c
-i r cs pc
+#set architecture i8086
+#file boot/bootsect.sym
+#b *0x7c00
+#b *0x901d
+#c
+#i r cs pc
 
 #file boot/setup.sym
 #b _start
 
-#file images/kernel.sym
-#b main
+file images/kernel.sym
+b main
 
 
 
-set $SHOW_CONTEXT = 1
+set $SHOW_CONTEXT = 0
 
 # nb of instructions to display
 set $CODE_SIZE = 5
