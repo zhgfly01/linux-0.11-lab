@@ -57,7 +57,7 @@ boot/head.o: boot/head.s FORCE
 	@make head.o -C boot/
 
 kernel.sym: boot/head.o init/main.o \
-	$(ARCHIVES) $(DRIVERS) $(MATH) $(LIBS)
+		$(ARCHIVES) $(DRIVERS) $(MATH) $(LIBS)
 	@$(LD) $(LDFLAGS) boot/head.o init/main.o \
 	$(ARCHIVES) \
 	$(DRIVERS) \
@@ -115,7 +115,7 @@ include Makefile.callgraph
 FORCE: ;
 
 help:
-	@echo "------------------Linux 0.11 Lab (http://tinylab.org/linux-0.11-lab)------------------"
+	@echo "-----Linux 0.11 Lab (http://tinylab.org/linux-0.11-lab)-----"
 	@echo ""
 	@echo "     :: Compile ::"
 	@echo ""
@@ -147,6 +147,6 @@ help:
 	@echo ""
 	@echo "     ~ Enjoy It ~"
 	@echo ""
-	@echo "-------------------Linux 0.11 Lab (http://tinylab.org/linux-0.11-lab)-------------------"
+	@echo "-----Linux 0.11 Lab (http://tinylab.org/linux-0.11-lab)-----"
 	@echo ""
-	@echo "--------------->   Linux Kernel Lab (http://tinylab.org/linux-lab)   <------------------"
+	@echo "--->  Linux Kernel Lab (http://tinylab.org/linux-lab)   <---"
